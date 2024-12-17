@@ -54,13 +54,18 @@ _classes = (
     OBJECT_OT_link_materials_data_or_object,
 )
 
+def register_menu_later():
+    """Delay appending the menu item to ensure Blender is fully initialized."""
+    bpy.types.VIEW3D_MT_make_links.append(link_transfer_menu_func)
+    return None  # Stop the timer
 
 def register():
     for cls in _classes:
         bpy.utils.register_class(cls)
     
     # Append to Link/Transfer Data menu
-    bpy.types.VIEW3D_MT_make_links.append(link_transfer_menu_func)
+    # bpy.types.VIEW3D_MT_make_links.append(link_transfer_menu_func)
+    bpy.app.timers.register(register_menu_later, first_interval=2.1)
 
 
 def unregister():
