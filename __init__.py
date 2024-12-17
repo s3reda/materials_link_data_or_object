@@ -1,6 +1,6 @@
 bl_info = {
     "name": "Link Materials to Data or Object",
-    "author": "Your Name",
+    "author": "sereda",
     "version": (1, 0, 0),
     "blender": (4, 3, 1),
     "location": "Ctrl+L > Link/Transfer Data",
