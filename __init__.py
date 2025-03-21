@@ -16,7 +16,7 @@ class OBJECT_OT_link_materials_data_or_object(bpy.types.Operator):
     bl_idname = "object.link_materials_data_or_object"
     bl_label = "Link Materials to Data or Object"
     bl_options = {'REGISTER', 'UNDO'}
-    
+
     link_to: bpy.props.EnumProperty(
         name="Link To",
         description="Link materials to",
@@ -26,11 +26,11 @@ class OBJECT_OT_link_materials_data_or_object(bpy.types.Operator):
         ],
         default='DATA'
     )
-    
+
     @classmethod
     def poll(cls, context):
         return context.active_object
-    
+
     def execute(self, context):
         initial_active_object = bpy.context.active_object  # Store active object
         for obj in bpy.context.selected_objects:
@@ -40,14 +40,15 @@ class OBJECT_OT_link_materials_data_or_object(bpy.types.Operator):
                 mat_slot.link = self.link_to
                 mat_slot.material = mat
         bpy.context.view_layer.objects.active = initial_active_object  # Restore active object
-        
-        self.report({'INFO'}, "Completed.")        
+
+        self.report({'INFO'}, "Completed")
         return {'FINISHED'}
 
 
 # Add the operator to the Link/Transfer Data menu (Ctrl+L)
 def link_transfer_menu_func(self, context):
-    self.layout.operator(OBJECT_OT_link_materials_data_or_object.bl_idname, text="Link Materials to Data/Object")
+    self.layout.separator()
+    self.layout.operator(OBJECT_OT_link_materials_data_or_object.bl_idname, text="Link Materials to Data/Object", icon="MATERIAL")
 
 
 _classes = (
@@ -62,16 +63,13 @@ def register_menu_later():
 def register():
     for cls in _classes:
         bpy.utils.register_class(cls)
-    
-    # Append to Link/Transfer Data menu
-    # bpy.types.VIEW3D_MT_make_links.append(link_transfer_menu_func)
-    bpy.app.timers.register(register_menu_later, first_interval=2.1)
 
+    bpy.types.VIEW3D_MT_make_links.append(link_transfer_menu_func)
 
 def unregister():
     # Remove from Link/Transfer Data menu
     bpy.types.VIEW3D_MT_make_links.remove(link_transfer_menu_func)
-    
+
     for cls in reversed(_classes):
         bpy.utils.unregister_class(cls)
 
